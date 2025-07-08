@@ -25,9 +25,16 @@ app.get('/recipes', async (req, res) => {
 });
 
 app.post('/recipes', async (req, res) => {
-  const recipe = new Recipe(req.body);
-  await recipe.save();
-  res.json(recipe);
+  console.log('POST /recipes called with:', req.body);
+  try {
+    const recipe = new Recipe(req.body);
+    const savedRecipe = await recipe.save();
+    console.log('Saved recipe:', savedRecipe);
+    res.json(savedRecipe);
+  } catch (error) {
+    console.error('Error saving recipe:', error);
+    res.status(500).send('Error saving recipe');
+  }
 });
 
 const PORT = process.env.PORT || 5000;
